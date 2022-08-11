@@ -16,7 +16,7 @@
 # Check for Modules, if not available install them. 
 #Exit script if can't install
 
-#Microsoft.Grap
+#Microsoft.Graph
 if (Get-Module -ListAvailable -name Microsoft.Graph) {
   write-host "Microsoft.Graph installed! Req (1/4)" -ForegroundColor Green
 }
