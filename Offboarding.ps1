@@ -16,30 +16,14 @@
 # Check for Modules, if not available install them. 
 #Exit script if can't install
 
-#Microsoft.Graph
-if (Get-Module -ListAvailable -name Microsoft.Graph) {
-  write-host "Microsoft.Graph installed! Req (1/4)" -ForegroundColor Green
-}
-else {
-  try {
-    Install-Module Microsoft.Graph -Erroraction Stop
-    write-host "Module just got installed! Req (1/4)" -ForegroundColor Green
-  } 
-  catch {
-    write-host "Could not install required graph module (Microsoft.Graph)" -ForegroundColor Red
-    Pause
-    exit
-  } 
-}
-
 #Users.Actions
 if (Get-Module -ListAvailable -name Microsoft.Graph.Users.Actions) {
-  write-host "Microsoft.Graph.Users.Actions installed! Req (2/4)" -ForegroundColor Green
+  write-host "Microsoft.Graph.Users.Actions installed! Req (1/3)" -ForegroundColor Green
 }
 else {
   try {
     Install-Module Microsoft.Graph.Users.Actions -ErrorAction Stop
-    write-host "Module just got installed! Req (2/4)" -ForegroundColor Green
+    write-host "Module just got installed! Req (1/3)" -ForegroundColor Green
   } 
   catch {
     write-host "Could not install required graph module (Microsoft.Graph.Users.Action)" -ForegroundColor Red
@@ -50,12 +34,12 @@ else {
 
 #Identity.DirectoryManagement
 if (Get-Module -ListAvailable -name Microsoft.Graph.Identity.DirectoryManagement) {
-  write-host "Microsoft.Graph.Identity.DirectoryManagement installed! Req (3/4)" -ForegroundColor Green
+  write-host "Microsoft.Graph.Identity.DirectoryManagement installed! Req (2/3)" -ForegroundColor Green
 }
 else {
   try {
     Install-Module Microsoft.Graph.Identity.DirectoryManagement -ErrorAction Stop
-    write-host "Module just got installed! Req (3/4)" -ForegroundColor Green
+    write-host "Module just got installed! Req (2/3)" -ForegroundColor Green
   } 
   catch {
     write-host "Could not install required graph module (Microsoft.Graph.Identity.DirectoryManagement)" -ForegroundColor Red
@@ -66,12 +50,12 @@ else {
 
 #ExchangeOnlineManagement
 if (Get-Module -ListAvailable -name ExchangeOnlineManagement) {
-  write-host "ExchangeOnlineManagement installed! (req 4/4)" -ForegroundColor Green
+  write-host "ExchangeOnlineManagement installed! (req 3/3)" -ForegroundColor Green
 }
 else {
   try {
     Install-Module Microsoft.Graph.Users.Actions -ErrorAction Stop
-    write-host "Module just got installed! Req (4/4)" -ForegroundColor Green
+    write-host "Module just got installed! Req (3/3)" -ForegroundColor Green
   } 
   catch {
     write-host "Could not install required graph module (ExchangeOnlineManagement)" -ForegroundColor Red
@@ -107,7 +91,7 @@ Connect-Graph User.ReadWrite.All, Organization.Read.All
 $mguser = Get-MgUser -UserId $user 
 
 
-#Block sing-in,change display name
+#Block sign-in,change display name
 Update-MgUser -UserId $user -DisplayName ("Archief - " + $mguser.displayname) -AccountEnabled:$false
 
 #Removes License
