@@ -13,8 +13,8 @@
   Exchange Online Management
 #>
 
-# Check for Modules, if not available install them. 
-#Exit script if can't install
+#Forces shell to check for uninitialized variables.
+Set-Strictmode -version 2
 
 #Users.Actions
 if (Get-Module -ListAvailable -name Microsoft.Graph.Users.Actions) {
@@ -71,7 +71,6 @@ $user = Read-Host ("Vul e-mailadres in")
 #Hide from GAL
 if ((get-mailbox $user).HiddenFromAddressListsEnabled)  {
   write-host "User already hidden from GAL" -ForegroundColor Green
-  continue
 } else {
   Set-Mailbox $user -HiddenFromAddressListsEnabled $true
 }
@@ -87,15 +86,38 @@ if ((get-mailbox $user).RecipientTypeDetails -eq "UserMailbox"){
 
 #Connect to Microsoft Graph for license cmdlets.
 Connect-Graph User.ReadWrite.All, Organization.Read.All
+
 #Set user to MgUser
 $mguser = Get-MgUser -UserId $user 
-
 
 #Block sign-in,change display name
 Update-MgUser -UserId $user -DisplayName ("Archief - " + $mguser.displayname) -AccountEnabled:$false
 
+
+#Get assigned license information for user
+$lic = Get-MgUserLicenseDetail -userid $user
+
+
+<#Import CSV File with all license results from Get-MgUserLicenseDetails, List notation: !SEMICOLON DELIMITED ONLY
+  Get CSV File from: 
+  https://docs.microsoft.com/en-us/azure/active-directory/enterprise-users/licensing-service-plan-reference
+#>
+
+$licList = import-csv ".\Product names and service plan identifiers for licensing.csv" -Delimiter ';' | Where-Object {$lic.SkuID -match $_.GUID} | Select-Object Product_Display_Name -unique
+
+
 #Removes License
-$licId = Get-MgUserLicenseDetail -userid $user
-Set-MgUserLicense -UserId $user -RemoveLicenses $licId.SkuId -AddLicenses @{}
 
+If ($null -eq (Get-MgUserLicenseDetail -UserId $user)){
+  Write-Host "No licenses currently assigned to $user" -ForegroundColor Red
+} else {
+  write-host "Removed the following licenses:" -ForegroundColor White -BackgroundColor Green
+  $licList
+  Set-MgUserLicense -UserId $user -RemoveLicenses $lic.SkuId -AddLicenses @{}
+}
 
+#Pause to read which licenses got removed
+#Disconnect current sessions to prevent too many active connection errors
+Read-Host -Prompt "User archived Press enter to exit"
+Disconnect-Graph
+Disconnect-ExchangeOnline -Confirm:$false
