@@ -1,6 +1,6 @@
 # Offboarding-Office-365
 Offboarding using Microsoft.Graph/ExchangeOnlineManagement
 
-Requirements:
+Requirements: <br>
 Install-Module Microsoft.Graph
 
