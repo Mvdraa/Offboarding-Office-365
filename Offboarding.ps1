@@ -21,15 +21,8 @@ if (Get-Module -ListAvailable -name Microsoft.Graph.Users.Actions) {
   write-host "Microsoft.Graph.Users.Actions installed! Req (1/3)" -ForegroundColor Green
 }
 else {
-  try {
-    Install-Module Microsoft.Graph.Users.Actions -ErrorAction Stop
-    write-host "Module just got installed! Req (1/3)" -ForegroundColor Green
-  } 
-  catch {
-    write-host "Could not install required graph module (Microsoft.Graph.Users.Action)" -ForegroundColor Red
-    Pause
-    exit
-  } 
+  Install-Module Microsoft.Graph.Users.Actions -ErrorAction Stop
+  write-host "Module just got installed! Req (1/3)" -ForegroundColor Green
 }
 
 #Identity.DirectoryManagement
@@ -37,32 +30,19 @@ if (Get-Module -ListAvailable -name Microsoft.Graph.Identity.DirectoryManagement
   write-host "Microsoft.Graph.Identity.DirectoryManagement installed! Req (2/3)" -ForegroundColor Green
 }
 else {
-  try {
-    Install-Module Microsoft.Graph.Identity.DirectoryManagement -ErrorAction Stop
-    write-host "Module just got installed! Req (2/3)" -ForegroundColor Green
-  } 
-  catch {
-    write-host "Could not install required graph module (Microsoft.Graph.Identity.DirectoryManagement)" -ForegroundColor Red
-    Pause
-    exit
-  }
-}
+  Install-Module Microsoft.Graph.Identity.DirectoryManagement -ErrorAction Stop
+  write-host "Module just got installed! Req (2/3)" -ForegroundColor Green
+} 
 
 #ExchangeOnlineManagement
 if (Get-Module -ListAvailable -name ExchangeOnlineManagement) {
   write-host "ExchangeOnlineManagement installed! (req 3/3)" -ForegroundColor Green
 }
 else {
-  try {
-    Install-Module Microsoft.Graph.Users.Actions -ErrorAction Stop
-    write-host "Module just got installed! Req (3/3)" -ForegroundColor Green
-  } 
-  catch {
-    write-host "Could not install required graph module (ExchangeOnlineManagement)" -ForegroundColor Red
-    Pause
-    exit
-  }
-}
+  Install-Module Microsoft.Graph.Users.Actions -ErrorAction Stop
+  write-host "Module just got installed! Req (3/3)" -ForegroundColor Green
+} 
+
 
 #Set user to Offboard
 Connect-ExchangeOnline
